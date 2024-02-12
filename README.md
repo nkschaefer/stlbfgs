@@ -40,6 +40,9 @@ cmake -B build -DSTLBFGS_UNIT_TESTS:BOOL=ON
 cmake --build build -j
 ctest --test-dir build -V
 ```
+# Modifications to original repository
+
+The only changes made here is a more explicit constructor for the STLBFGS::Optimizer::IHessian struct to make the code compliant with the C++11 standard.
 
 # References
 
