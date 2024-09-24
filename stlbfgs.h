@@ -12,7 +12,7 @@ namespace STLBFGS {
     typedef std::deque<vector> history;
 
     struct Optimizer {
-        Optimizer(func_grad_eval func_grad, int history_depth = 10, bool m1qn3_precond = true) : func_grad{func_grad}, invH{history_depth, m1qn3_precond} {}
+        Optimizer(func_grad_eval func_grad, int max_threads=1, int history_depth = 10, bool m1qn3_precond = true) : nt{max_threads}, func_grad{func_grad}, invH{history_depth, m1qn3_precond} {}
         bool run(vector &sol); // actual optimization loop
 
         const func_grad_eval func_grad;
@@ -41,7 +41,7 @@ namespace STLBFGS {
         double mu  = 1e-4; // sufficient decrease constant (Armijo rule)
         double eta = 9e-1; // curvature condition constant
 //      int lsmaxfev = 16;  // TODO move all line search parameters here
-
+        int nt = 1; // Max number of OpenMP threads
         bool verbose = true;
     };
 }

@@ -112,6 +112,11 @@ namespace STLBFGS {
         const int n = static_cast<int>(x.size());
         double f;
         vector g(n), p(n);
+        
+        // Limit number of OpenMP threads
+        #if defined(_OPENMP)
+            omp_set_num_threads(nt);
+        #endif
 
         func_grad(x, f, g);
         for (int i=0; i<maxiter; i++) {
