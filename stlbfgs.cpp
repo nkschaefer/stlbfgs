@@ -137,7 +137,9 @@ namespace STLBFGS {
             }
 
             invH.mult(g, p);
-            assert(-dot(g, p)<0);
+            double descent = -dot(g, p);
+            if (!std::isfinite(descent) || descent >= 0)
+                return false;
 
             double fprev = f;
             vector xprev = x, gprev = g;
@@ -153,7 +155,8 @@ namespace STLBFGS {
             };
 
             double alpha = i ? 1. : 1./norm(g); // TODO move restoration of alpha here from linesearch routine
-            assert(std::isfinite(alpha));
+            if (!std::isfinite(alpha))
+                return false;
             Sample f0 = {0, f, -dot(g, p)}; // N.B. (unsucessfull) call to line_search_more_thuente() modifies g, so save it for subsequent call to line_search_backtracking()
             if (
                     !line_search_more_thuente(ls_func, f0, alpha, mu, eta) &&
